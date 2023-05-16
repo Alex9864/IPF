@@ -8,7 +8,8 @@ import 'package:rounded_loading_button/rounded_loading_button.dart';
 import '../shared/widgets/custom_button.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  static bool dailyQuestionnaire = false;
+HomePage({Key? key}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -88,19 +89,21 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 30,),
-                RoundedLoadingButton(
-                    child: Text(
-                      'Start my questionnaire !',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
+                SizedBox(height: 50),
+                if (!HomePage.dailyQuestionnaire) ...[
+                  RoundedLoadingButton(
+                      child: Text(
+                        'Start my daily questionnaire !',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
-                    color: Colors.redAccent,
-                    controller: _startQuestionnaireBtnController,
-                    onPressed: () => _onClickStartQuestionnaireButton()
-                ),
+                      color: Colors.redAccent,
+                      controller: _startQuestionnaireBtnController,
+                      onPressed: () => _onClickStartQuestionnaireButton()
+                  ),
+                ],
               ],
             ),
           ),
@@ -111,7 +114,6 @@ class _HomePageState extends State<HomePage> {
   void _onClickStartQuestionnaireButton(){
     Navigator.of(context).push(
         MaterialPageRoute(
-          // builder: (context) => const AuthenticationPage()
             builder: (context) => const QuestionnairePage()
         )
     );

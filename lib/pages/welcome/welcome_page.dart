@@ -2,7 +2,6 @@ import 'package:ipf/pages/auth/authtentification_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:ipf/pages/navigation_bar/bottom_navigation_bar_page.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class WelcomePage extends StatefulWidget {
@@ -14,7 +13,6 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   final RoundedLoadingButtonController _getStartedBtnController = RoundedLoadingButtonController();
-  final RoundedLoadingButtonController _haveAnAccountBtnController = RoundedLoadingButtonController();
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +52,6 @@ class _WelcomePageState extends State<WelcomePage> {
                   onPressed: () => _onClickGetStartedButton(),
                 ),
                 SizedBox(height: 30),
-                RoundedLoadingButton(
-                  child: Text(
-                    'I already have an account',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  color: Colors.grey.withOpacity(0.8),
-                  controller: _haveAnAccountBtnController,
-                  onPressed: () => _onClickHaveAnAccountButton(),
-                ),
               ],
             ),
           ),
@@ -73,16 +62,10 @@ class _WelcomePageState extends State<WelcomePage> {
   void _onClickGetStartedButton(){
     Navigator.of(context).push(
       MaterialPageRoute(
-          // builder: (context) => const AuthenticationPage()
-          builder: (context) => const BottomNavigationBarPage()
+          builder: (context) => const AuthenticationPage()
+          // builder: (context) => const BottomNavigationBarPage()
       )
     );
     _getStartedBtnController.stop();
-    _haveAnAccountBtnController.stop();
-  }
-
-  void _onClickHaveAnAccountButton(){
-    _getStartedBtnController.stop();
-    _haveAnAccountBtnController.stop();
   }
 }

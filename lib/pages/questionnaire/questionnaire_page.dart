@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
+import 'package:ipf/pages/home/home_page.dart';
 
 class QuestionnairePage extends StatefulWidget {
   const QuestionnairePage({Key? key}) : super(key: key);
@@ -44,11 +45,11 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
   }
   void _onClickFinishButton(){
     Navigator.of(context).push(
-        MaterialPageRoute(
-          // builder: (context) => const AuthenticationPage()
-            builder: (context) => const QuestionnairePage()
-        )
+      MaterialPageRoute(
+        builder: (context) => const QuestionnairePage()
+      ),
     );
+    HomePage.dailyQuestionnaire = false;
     _finishBtnController.stop();
   }
 }

@@ -17,7 +17,7 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage> {
   int _pageSelectedIndex = 0;
   
   List<Widget> _bottomNavigationBarWidgets = <Widget>[
-    const HomePage(),
+    HomePage(),
     const PortfolioPage(),
     const ProfilePage()
   ];
