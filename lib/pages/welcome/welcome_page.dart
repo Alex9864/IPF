@@ -29,13 +29,13 @@ class _WelcomePageState extends State<WelcomePage> {
                   height: 300,
                 ),
                 SizedBox(height: 30),
-                Text("Hey ! Welcome",
+                Text("Welcome !",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 25
                 ),),
                 SizedBox(height: 10),
-                Text("We deliver on demand organic fresh fruits directly from your nearby farms",
+                Text("Employee's health is our priority",
                   style: TextStyle(
                     fontWeight: FontWeight.w200,
                     fontSize: 15

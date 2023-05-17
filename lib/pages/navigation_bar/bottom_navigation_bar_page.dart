@@ -2,6 +2,8 @@ import 'package:ipf/pages/home/home_page.dart';
 import 'package:ipf/pages/portfolio/portfolio_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ipf/pages/view%20questionnaires/view_questionnaires.dart';
+import 'package:ipf/pages/wip/wip_page.dart';
 
 import '../profile/profile_page.dart';
 
@@ -18,7 +20,7 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage> {
   
   List<Widget> _bottomNavigationBarWidgets = <Widget>[
     HomePage(),
-    const PortfolioPage(),
+    const ViewQuestionnairesPage(),
     const ProfilePage()
   ];
   
@@ -35,8 +37,8 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage> {
             label: "Home"
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.book),
-              label: "Portfolio"
+              icon: Icon(Icons.dangerous_outlined),
+              label: "WIP"
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.account_circle),

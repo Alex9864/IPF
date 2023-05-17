@@ -53,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: 20,),
                 Text(
-                  'Welcome [USER]',
+                  'Welcome Alex',
                   style: TextStyle(
                     fontSize: 35,
                     fontWeight: FontWeight.w800,

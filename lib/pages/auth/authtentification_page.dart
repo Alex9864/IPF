@@ -71,7 +71,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                       controller: _PasswordTextFormFieldController,
                       obscureText: !_passwordVisible,
                       decoration: InputDecoration(
-                        icon: Icon(Icons.person_outline),
+                        icon: Icon(Icons.lock_open),
                         labelText: "Password",
                         hintText: 'Enter your password',
                         suffixIcon: IconButton(
@@ -121,7 +121,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
           if(_PasswordTextFormFieldController.text == "PasswordTest"){
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => BottomNavigationBarPage()
+                builder: (context) => const BottomNavigationBarPage()
               )
             );
             _verifyBtnController.stop();

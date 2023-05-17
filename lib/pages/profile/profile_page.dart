@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ipf/pages/shared/widgets/custom_button.dart';
+import 'package:ipf/pages/welcome/welcome_page.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -11,6 +12,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
 
+  int? _choice = 1;
   final RoundedLoadingButtonController _disconnectBtnController = RoundedLoadingButtonController();
 
   @override
@@ -42,14 +44,46 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 25,),
                 Text(
-                  '[USER]',
+                  'Alex',
                   style:
                   TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                SizedBox(height: 25,),
+                SizedBox(height: 30),
+                Text(
+                  'Language',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Wrap(
+                  children: List.generate(2,(int index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: ChoiceChip(
+                        padding: EdgeInsets.all(8),
+                        label: Text(['English', 'Français'][index], style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black
+                        ),),
+                        selectedColor: Colors.greenAccent,
+                        selected: _choice == index,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            _choice = selected ? index : null;
+                          });
+                        },
+                      ),
+                    );
+                  },
+                  ).toList(),
+                ),
+                SizedBox(height: 25),
                 RoundedLoadingButton(
                   child: Text(
                     'Disconnect',
@@ -69,8 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
   void _onClickDisconnectButton(){
     Navigator.of(context).push(
         MaterialPageRoute(
-          // builder: (context) => const AuthenticationPage()
-            builder: (context) => const ProfilePage()
+            builder: (context) => const WelcomePage()
         )
     );
     _disconnectBtnController.stop();
