@@ -1,8 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:ipf/pages/image%20model/image_model.dart';
+import 'package:ipf/pages/profile/profile_page.dart';
 import 'package:ipf/pages/questionnaire/questionnaire_page.dart';
+import 'package:provider/provider.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 import '../shared/widgets/custom_button.dart';
@@ -18,12 +23,21 @@ HomePage({Key? key}) : super(key: key);
 class _HomePageState extends State<HomePage> {
 
   final RoundedLoadingButtonController _startQuestionnaireBtnController = RoundedLoadingButtonController();
-
+  final db = FirebaseFirestore.instance;
   var now = new DateTime.now();
   var formatter = new DateFormat.yMMMMEEEEd('en_US');
 
+  final user = <String, dynamic>{
+    "first": "Ada",
+    "last": "Lovelace",
+    "born": 1815
+  };
+
   @override
   Widget build(BuildContext context) {
+
+    String imageSelectionnee = Provider.of<ImageModel>(context).selectedImage;
+    String role = Provider.of<ImageModel>(context).role;
 
     String formattedDate = formatter.format(now);
 
@@ -41,10 +55,22 @@ class _HomePageState extends State<HomePage> {
                     IconButton(
                         onPressed: () {Navigator.pop(context);}, icon: Icon(Icons.arrow_back),
                     ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.network(
-                        'https://picsum.photos/seed/353/600',
+                    Text(
+                      'Role : ' + role,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ProfilePage()),
+                        );
+                      },
+                      child: Image.asset(
+                        imageSelectionnee,
                         width: 50,
                         fit: BoxFit.contain,
                       ),
@@ -53,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: 20,),
                 Text(
-                  'Welcome Alex',
+                  'Welcome Alexandre',
                   style: TextStyle(
                     fontSize: 35,
                     fontWeight: FontWeight.w800,
@@ -104,6 +130,19 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () => _onClickStartQuestionnaireButton()
                   ),
                 ],
+                SizedBox(height: 20),
+                RoundedLoadingButton(
+                    child: Text(
+                      'Test Button',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                    color: Colors.redAccent,
+                    controller: _startQuestionnaireBtnController,
+                    onPressed: () => _onClickTestButton()
+                ),
               ],
             ),
           ),
@@ -117,6 +156,12 @@ class _HomePageState extends State<HomePage> {
             builder: (context) => const QuestionnairePage()
         )
     );
+    _startQuestionnaireBtnController.stop();
+
+  }
+
+  void _onClickTestButton(){
+    db.collection("users").add(user).then((DocumentReference doc) => print('DocumentSnapshot added with ID: ${doc.id}'));
     _startQuestionnaireBtnController.stop();
   }
 }
