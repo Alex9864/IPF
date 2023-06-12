@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class ImageModel extends ChangeNotifier {
   String _selectedImage = 'assets/images/Avatars/chauve-souris.png';
-  String role = "User";
+  String role = "Admin";
 
   String get selectedImage => _selectedImage;
 

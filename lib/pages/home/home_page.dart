@@ -52,9 +52,6 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(
-                        onPressed: () {Navigator.pop(context);}, icon: Icon(Icons.arrow_back),
-                    ),
                     Text(
                       'Role : ' + role,
                       style: TextStyle(

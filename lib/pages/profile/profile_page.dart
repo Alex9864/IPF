@@ -49,15 +49,6 @@ class _ProfilePageState extends State<ProfilePage> {
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {Navigator.pop(context);}, icon: Icon(Icons.arrow_back),
-                    ),
-                    SizedBox(height: 1,)
-                  ],
-                ),
                 SizedBox(height: 20,),
                 Stack(
                   children: [

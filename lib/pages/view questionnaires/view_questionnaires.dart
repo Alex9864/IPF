@@ -20,13 +20,7 @@ class _ViewQuestionnairesPageState extends State<ViewQuestionnairesPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GestureDetector(
-                  onTap: () => _goBack(),
-                  child: Icon(
-                    Icons.arrow_back,
-                  ),
-                ),
-                SizedBox(height: 30),
+                SizedBox(height: 20),
                 Text("View Questionnaires",
                   style: TextStyle(
                       fontWeight: FontWeight.w600,

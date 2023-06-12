@@ -1,9 +1,11 @@
+import 'package:ipf/pages/employees/employees_page.dart';
 import 'package:ipf/pages/home/home_page.dart';
 import 'package:ipf/pages/image%20model/image_model.dart';
-import 'package:ipf/pages/portfolio/portfolio_page.dart';
+import 'package:ipf/pages/notifications/notifications_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ipf/pages/view%20questionnaires/view_questionnaires.dart';
+import 'package:ipf/pages/my%20statistics/my_statistics.dart';
 import 'package:ipf/pages/wip/wip_page.dart';
 import 'package:provider/provider.dart';
 
@@ -21,13 +23,15 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage> {
 
   List<Widget> _userNavigationItems = <Widget>[
     HomePage(),
-    const ViewQuestionnairesPage(),
+    MyStatisticsPage(),
+    const NotificationsPage(),
     const ProfilePage(),
   ];
 
   List<Widget> _adminNavigationItems = <Widget>[
     HomePage(),
     const ViewQuestionnairesPage(),
+    const EmployeesPage(),
     const ProfilePage(),
   ];
 
@@ -54,12 +58,17 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage> {
             label: role == "User" ? "My statistics" : "Questionnaires",
           ),
           BottomNavigationBarItem(
+            icon: role == "User" ? Icon(Icons.notifications) : Icon(Icons.work),
+            label: role == "User" ? "Notifications" : "Employees",
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),
             label: "Profil",
           ),
         ],
         currentIndex: _pageSelectedIndex,
-        selectedItemColor: _selectedItemColor(),
+        unselectedItemColor: Colors.orangeAccent,
+        selectedItemColor: Colors.deepOrange,
         onTap: (value) => _onItemSelected(value),
       ),
     );
@@ -71,13 +80,15 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage> {
     });
   }
 
-  Color _selectedItemColor() {
-    if (_pageSelectedIndex == 0) {
-      return Colors.blue;
-    } else if (_pageSelectedIndex == 1) {
-      return Colors.pinkAccent;
-    } else {
-      return Colors.orangeAccent;
-    }
-  }
+  // Color _selectedItemColor() {
+  //   if (_pageSelectedIndex == 0) {
+  //     return Colors.deepOrangeAccent;
+  //   } else if (_pageSelectedIndex == 1) {
+  //     return Colors.deepOrangeAccent;
+  //   } else if (_pageSelectedIndex == 2) {
+  //     return Colors.deepOrangeAccent;
+  //   } else {
+  //     return Colors.deepOrangeAccent;
+  //   }
+  // }
 }

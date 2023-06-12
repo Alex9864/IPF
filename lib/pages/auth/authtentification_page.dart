@@ -116,9 +116,9 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   void _sendOtpCodeWithFirebase() async {
     if(_LoginFormKey.currentState!.validate()){
-      if(_LoginTextFormFieldController.text == "LoginTest"){
+      if(_LoginTextFormFieldController.text == "User" || _LoginTextFormFieldController.text == "Admin"){
         if(_PasswordFormKey.currentState!.validate()){
-          if(_PasswordTextFormFieldController.text == "PasswordTest"){
+          if(_PasswordTextFormFieldController.text == "User" || _PasswordTextFormFieldController.text == "Admin"){
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const BottomNavigationBarPage()

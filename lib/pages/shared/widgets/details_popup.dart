@@ -145,6 +145,10 @@ class DetailsPopup extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
+          child: Text("Suggest an action"),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context),
           child: Text("Close"),
         ),
       ],
