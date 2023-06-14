@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ipf/pages/image%20model/image_model.dart';
 import 'package:ipf/pages/navigation_bar/bottom_navigation_bar_page.dart';
+import 'package:provider/provider.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 
 import '../otp/otp_page.dart';
@@ -13,12 +16,17 @@ class AuthenticationPage extends StatefulWidget {
 }
 
 class _AuthenticationPageState extends State<AuthenticationPage> {
+
   final _LoginFormKey = GlobalKey<FormState>();
-  final _PasswordFormKey = GlobalKey<FormState>();
   final TextEditingController _LoginTextFormFieldController = TextEditingController();
+
+  final _PasswordFormKey = GlobalKey<FormState>();
   final TextEditingController _PasswordTextFormFieldController = TextEditingController();
-  final RoundedLoadingButtonController _verifyBtnController = RoundedLoadingButtonController();
   bool _passwordVisible = false;
+
+  final RoundedLoadingButtonController _verifyBtnController = RoundedLoadingButtonController();
+
+  final db = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +124,19 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   void _sendOtpCodeWithFirebase() async {
     if(_LoginFormKey.currentState!.validate()){
-      if(_LoginTextFormFieldController.text == "User" || _LoginTextFormFieldController.text == "Admin"){
+      final QuerySnapshot result = await db.collection('users').where('Login', isEqualTo: _LoginTextFormFieldController.text).get();
+      final List<DocumentSnapshot> documents = result.docs;
+      if (documents.length > 0) { // If Login exists
         if(_PasswordFormKey.currentState!.validate()){
-          if(_PasswordTextFormFieldController.text == "User" || _PasswordTextFormFieldController.text == "Admin"){
+          final data = documents[0].data() as Map<String, dynamic>;
+          final password = data['Password'];
+          if(_PasswordTextFormFieldController.text == password ){
+            final Avatar = data['Avatar'];
+            final Role = data['Role'];
+            final FirstName = data['FirstName'];
+            final LastName = data['LastName'];
+            final Login = data['Login'];
+            changeUser(Avatar, Role, FirstName, LastName, Login);
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => const BottomNavigationBarPage()
@@ -126,86 +144,30 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
             );
             _verifyBtnController.stop();
           } else {
+            print("Wrong password");
             _verifyBtnController.stop();
           }
         } else {
+          print("You must enter a valid password");
           _verifyBtnController.stop();
         }
         _verifyBtnController.stop();
       } else {
+        print("No account found with this login");
         _verifyBtnController.stop();
       }
     } else {
+      print("You must enter a valid login");
       _verifyBtnController.stop();
     }
-
-
-
   }
 
-  // void _sendOtpCodeWithFirebase() async {
-  //   if(_PhoneFormKey.currentState!.validate()){
-  //     if(_phoneNumberTextFormFieldController.text.isNotEmpty){
-  //       String phoneNumber = "+33${_phoneNumberTextFormFieldController.text}";
-  //
-  //       await FirebaseAuth.instance.verifyPhoneNumber(
-  //         phoneNumber: phoneNumber,
-  //         verificationCompleted: (PhoneAuthCredential credential) {},
-  //         verificationFailed: (FirebaseAuthException e) {
-  //           if (e.code == 'invalid-phone-number') {
-  //             print('The provided phone number is not valid.');
-  //           }
-  //         },
-  //         codeSent: (String verificationId, int? resendToken) {
-  //           Navigator.pop(context);
-  //           Navigator.of(context).push(
-  //               MaterialPageRoute(
-  //                   builder: (context) => OtpPage(
-  //                       phoneNumber: phoneNumber,
-  //                       verificationId: verificationId,
-  //                       resendToken: resendToken!
-  //                   )
-  //               )
-  //           );
-  //         },
-  //         codeAutoRetrievalTimeout: (String verificationId) {},
-  //       );
-  //       _verifyBtnController.stop();
-  //     } else {
-  //       _verifyBtnController.stop();
-  //     }
-  //   } else {
-  //     _verifyBtnController.stop();
-  //   }
-  //   if(_NameFormKey.currentState!.validate()){
-  //     if(_NameTextFormFieldController.text.isNotEmpty){
-  //       //Code
-  //       _verifyBtnController.stop();
-  //     } else {
-  //       _verifyBtnController.stop();
-  //     }
-  //   } else {
-  //     _verifyBtnController.stop();
-  //   }
-  //   if(_SurnameFormKey.currentState!.validate()){
-  //     if(_SurnameTextFormFieldController.text.isNotEmpty){
-  //       //Code
-  //       _verifyBtnController.stop();
-  //     } else {
-  //       _verifyBtnController.stop();
-  //     }
-  //   } else {
-  //     _verifyBtnController.stop();
-  //   }
-  //   if(_MailFormKey.currentState!.validate()){
-  //     if(_MailTextFormFieldController.text.isNotEmpty){
-  //       //Code
-  //       _verifyBtnController.stop();
-  //     } else {
-  //       _verifyBtnController.stop();
-  //     }
-  //   } else {
-  //     _verifyBtnController.stop();
-  //   }
-  // }
+  void changeUser(String Avatar, String Role, String FirstName, String LastName, String Login) {
+    final imageModel = Provider.of<ImageModel>(context, listen: false);
+    imageModel.setAvatar(Avatar);
+    imageModel.setRole(Role);
+    imageModel.setFirstName(FirstName);
+    imageModel.setLastName(LastName);
+    imageModel.setLogin(Login);
+  }
 }

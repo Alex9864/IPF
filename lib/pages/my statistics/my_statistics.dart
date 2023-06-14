@@ -112,6 +112,14 @@ class _MyStatisticsPageState extends State<MyStatisticsPage> {
                 ),
               ),
             ),
+            Text(
+              '[Stats of how many questionnaires filled]',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+              ),
+              textAlign: TextAlign.center,
+            ),
             // const SizedBox(height: 8.0),
             // Expanded(
             //   child: ValueListenableBuilder<List<Event>>(

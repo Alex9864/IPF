@@ -141,22 +141,6 @@ class _QuestionnairePageState extends State<QuestionnairePage> {
                   },
                   ).toList(),
                 ),
-                SizedBox(height: 30),
-                Text(
-                  "Avez-vous des suggestions pour améliorer l'environnement de travail ?",
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(height: 10),
-                TextFormField(
-                  controller: _SuggestionsTextFormFieldController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.lightbulb),
-                  ),
-                  keyboardType: TextInputType.text,
-                ),
                 SizedBox(height: 20),
                 Text(
                   "Rendre mes réponses anonyme",

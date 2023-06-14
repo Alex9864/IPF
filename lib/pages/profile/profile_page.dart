@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:ipf/pages/image%20model/image_model.dart';
 import 'package:ipf/pages/shared/widgets/custom_button.dart';
@@ -16,31 +17,44 @@ class _ProfilePageState extends State<ProfilePage> {
 
   int? _choice = 0;
   int? _choice1 = 0;
+  String selectedAvatar = "";
+  String previousAvatar = "";
+
+  final db = FirebaseFirestore.instance;
 
   final RoundedLoadingButtonController _disconnectBtnController = RoundedLoadingButtonController();
   List<String> imagesSelectionnables = [
-    'assets/images/Avatars/chauve-souris.png',
-    'assets/images/Avatars/colombe.png',
-    'assets/images/Avatars/crabe.png',
-    'assets/images/Avatars/dauphin.png',
-    'assets/images/Avatars/dinosaure.png',
-    'assets/images/Avatars/girafe.png',
-    'assets/images/Avatars/lapin.png',
-    'assets/images/Avatars/lelephant.png',
-    'assets/images/Avatars/manchot.png',
-    'assets/images/Avatars/papillon.png',
-    'assets/images/Avatars/perroquet.png',
-    'assets/images/Avatars/poisson.png',
-    'assets/images/Avatars/renard.png',
-    'assets/images/Avatars/star.png',
-    'assets/images/Avatars/tulipe.png',
+    'chauve-souris',
+    'colombe',
+    'crabe',
+    'dauphin',
+    'dinosaure',
+    'girafe',
+    'lapin',
+    'lelephant',
+    'manchot',
+    'papillon',
+    'perroquet',
+    'poisson',
+    'renard',
+    'star',
+    'tulipe',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    final imageModel = Provider.of<ImageModel>(context, listen: false);
+    previousAvatar = imageModel.avatar;
+  }
 
   @override
   Widget build(BuildContext context) {
 
     final imageModel = Provider.of<ImageModel>(context);
-    String imagePrincipale = imageModel.selectedImage;
+    String avatar = imageModel.avatar;
+    String role = Provider.of<ImageModel>(context).role;
+    String firstName = Provider.of<ImageModel>(context).firstName;
 
     return Scaffold(
       body: SafeArea(
@@ -53,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Stack(
                   children: [
                     Image.asset(
-                      imagePrincipale,
+                      'assets/images/Avatars/'+ avatar + '.png',
                       width: 130,
                       fit: BoxFit.contain,
                     ),
@@ -71,7 +85,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 25,),
                 Text(
-                  'Alexandre',
+                  firstName,
                   style:
                   TextStyle(
                     fontSize: 30,
@@ -110,39 +124,41 @@ class _ProfilePageState extends State<ProfilePage> {
                   },
                   ).toList(),
                 ),
-                SizedBox(height: 25),
-                Text(
-                  'Remind me to do my daily questionnaire every morning',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
+                if (role == "User") ...[
+                  SizedBox(height: 25),
+                  Text(
+                    'Remind me to do my daily questionnaire every morning',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 10),
-                Wrap(
-                  children: List.generate(2,(int index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: ChoiceChip(
-                        padding: EdgeInsets.all(8),
-                        label: Text(['Yes', 'No'][index], style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black
-                        ),),
-                        selectedColor: Colors.greenAccent,
-                        selected: _choice1 == index,
-                        onSelected: (bool selected) {
-                          setState(() {
-                            _choice1 = selected ? index : null;
-                          });
-                        },
-                      ),
-                    );
-                  },
-                  ).toList(),
-                ),
+                  SizedBox(height: 10),
+                  Wrap(
+                    children: List.generate(2,(int index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: ChoiceChip(
+                          padding: EdgeInsets.all(8),
+                          label: Text(['Yes', 'No'][index], style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black
+                          ),),
+                          selectedColor: Colors.greenAccent,
+                          selected: _choice1 == index,
+                          onSelected: (bool selected) {
+                            setState(() {
+                              _choice1 = selected ? index : null;
+                            });
+                          },
+                        ),
+                      );
+                    },
+                    ).toList(),
+                  )
+                ],
                 SizedBox(height: 25),
                 RoundedLoadingButton(
                   child: Text(
@@ -188,10 +204,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     itemCount: imagesSelectionnables.length,
                     itemBuilder: (BuildContext context, int index) {
-                      String imagePath = imagesSelectionnables[index];
+                      String imagePath = 'assets/images/Avatars/'+ imagesSelectionnables[index] + '.png';
                       return GestureDetector(
                         onTap: () {
-                          changerImage(imagePath);
+                          changerImage(imagesSelectionnables[index]);
+                          selectedAvatar = imagesSelectionnables[index];
                         },
                         child: Image.asset(imagePath),
                       );
@@ -202,6 +219,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ElevatedButton(
                 child: Text('Appliquer'),
                 onPressed: () {
+                  changerImageDB(selectedAvatar);
+                  previousAvatar = selectedAvatar;
                   Navigator.pop(context);
                 },
               ),
@@ -209,11 +228,21 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         );
       },
-    );
+    ).then((value) {
+      changerImage(previousAvatar);
+    });
   }
 
   void changerImage(String nouvelleImage) {
     final imageModel = Provider.of<ImageModel>(context, listen: false);
-    imageModel.changeImage(nouvelleImage);
+    imageModel.setAvatar(nouvelleImage);
+  }
+
+  Future<void> changerImageDB(String nouvelleImage) async {
+    final usersRef = db.collection('users');
+    final userQuery = await usersRef.where('Login', isEqualTo: 'JeanDelarue').get();
+    final userDoc = userQuery.docs.first;
+
+    userDoc.reference.update({'Avatar': nouvelleImage});
   }
 }

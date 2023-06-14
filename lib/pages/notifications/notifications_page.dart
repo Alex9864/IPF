@@ -19,7 +19,14 @@ class _NotificationsPageState extends State<NotificationsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
+                Text(
+                  '[what the admin told you and be able to review their suggestion]',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           ),

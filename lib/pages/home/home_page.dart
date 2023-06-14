@@ -36,8 +36,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
 
-    String imageSelectionnee = Provider.of<ImageModel>(context).selectedImage;
+    String avatar = Provider.of<ImageModel>(context).avatar;
     String role = Provider.of<ImageModel>(context).role;
+    String firstName = Provider.of<ImageModel>(context).firstName;
 
     String formattedDate = formatter.format(now);
 
@@ -67,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       child: Image.asset(
-                        imageSelectionnee,
+                        'assets/images/Avatars/'+ avatar + '.png',
                         width: 50,
                         fit: BoxFit.contain,
                       ),
@@ -76,7 +77,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: 20,),
                 Text(
-                  'Welcome Alexandre',
+                  'Welcome ' + firstName,
                   style: TextStyle(
                     fontSize: 35,
                     fontWeight: FontWeight.w800,
@@ -113,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
                 SizedBox(height: 50),
-                if (!HomePage.dailyQuestionnaire) ...[
+                if (role == "User") ...[
                   RoundedLoadingButton(
                       child: Text(
                         'Start my daily questionnaire !',
@@ -125,6 +126,23 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.redAccent,
                       controller: _startQuestionnaireBtnController,
                       onPressed: () => _onClickStartQuestionnaireButton()
+                  ),
+                  Text(
+                    '[Things to do to get better]',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ]else...[
+                  Text(
+                    '[Stats of daily questionnaires]',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
                 SizedBox(height: 20),
@@ -154,7 +172,6 @@ class _HomePageState extends State<HomePage> {
         )
     );
     _startQuestionnaireBtnController.stop();
-
   }
 
   void _onClickTestButton(){

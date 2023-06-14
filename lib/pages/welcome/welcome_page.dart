@@ -12,7 +12,20 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+
   final RoundedLoadingButtonController _getStartedBtnController = RoundedLoadingButtonController();
+
+  String _selected = '2';
+  List<Map> _flags = [
+    {
+      'id': '1',
+      'image': 'assets/images/flags/france.png'
+    },
+    {
+      'id': '2',
+      'image': 'assets/images/flags/royaume-uni.png'
+    }
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +37,28 @@ class _WelcomePageState extends State<WelcomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: DropdownButtonHideUnderline(
+                    child: ButtonTheme(
+                      alignedDropdown: true,
+                      child: DropdownButton(
+                        value: _selected,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selected = newValue!;
+                          });
+                        },
+                        items: _flags.map((Item) {
+                          return DropdownMenuItem(
+                            value: Item['id'].toString(),
+                            child: Image.asset(Item['image'], width: 30)
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  )
+                ),
                 SvgPicture.asset(
                   'assets/images/success.svg',
                   height: 300,
