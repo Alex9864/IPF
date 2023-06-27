@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:ipf/pages/image%20model/image_model.dart';
 import 'package:ipf/pages/shared/widgets/custom_button.dart';
@@ -162,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 SizedBox(height: 25),
                 RoundedLoadingButton(
                   child: Text(
-                    'Disconnect',
+                    'Log Out',
                     style: TextStyle(color: Colors.white),
                   ),
                   color: Colors.redAccent,
@@ -177,11 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
   void _onClickDisconnectButton(){
-    Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => const WelcomePage()
-        )
-    );
+    FirebaseAuth.instance.signOut();
     _disconnectBtnController.stop();
   }
 
@@ -239,10 +236,9 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> changerImageDB(String nouvelleImage) async {
-    final usersRef = db.collection('users');
-    final userQuery = await usersRef.where('Login', isEqualTo: 'JeanDelarue').get();
-    final userDoc = userQuery.docs.first;
+    final user = FirebaseAuth.instance.currentUser!;
+    final DocumentReference _docRef = db.collection('users').doc(user.email!);
 
-    userDoc.reference.update({'Avatar': nouvelleImage});
+    _docRef.update({'Avatar': nouvelleImage});
   }
 }

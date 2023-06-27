@@ -1,13 +1,24 @@
+import 'package:firebase_admin/firebase_admin.dart';
+import 'package:flutter/services.dart';
 import 'package:ipf/pages/image%20model/image_model.dart';
 import 'package:ipf/pages/welcome/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
+
+  final serviceAccountKeyPath = 'C:\\Users\\Alex\\AndroidStudioProjects\\IPF\\lib\\firebaseadmin.json';
+
+  FirebaseAdmin.instance.initializeApp(
+    AppOptions(
+      credential: FirebaseAdmin.instance.certFromPath(serviceAccountKeyPath),
+    ),
+  );
 
   runApp(const MyApp());
 }

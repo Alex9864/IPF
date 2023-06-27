@@ -5,7 +5,7 @@ class ImageModel extends ChangeNotifier {
   String role = "Debug";
   String firstName = "FirstNameDebug";
   String lastName = "LastNameDebug";
-  String login = "LoginDebug";
+  bool firstConnection = true;
 
   void setAvatar(String newAvatar) {
     avatar = newAvatar;
@@ -23,8 +23,8 @@ class ImageModel extends ChangeNotifier {
     lastName = newLastName;
     notifyListeners();
   }
-  void setLogin(String newLogin) {
-    login = newLogin;
+  void setFirstConnection(bool newFirstConnection) {
+    firstConnection = newFirstConnection;
     notifyListeners();
   }
 }

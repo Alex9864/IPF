@@ -23,7 +23,9 @@ HomePage({Key? key}) : super(key: key);
 class _HomePageState extends State<HomePage> {
 
   final RoundedLoadingButtonController _startQuestionnaireBtnController = RoundedLoadingButtonController();
+
   final db = FirebaseFirestore.instance;
+
   var now = new DateTime.now();
   var formatter = new DateFormat.yMMMMEEEEd('en_US');
 
@@ -174,8 +176,10 @@ class _HomePageState extends State<HomePage> {
     _startQuestionnaireBtnController.stop();
   }
 
-  void _onClickTestButton(){
-    db.collection("users").add(user).then((DocumentReference doc) => print('DocumentSnapshot added with ID: ${doc.id}'));
+  Future<void> _onClickTestButton() async {
+    final QuerySnapshot result = await db.collection('users').where('Login', isEqualTo: "Admin").get();
+    final List<DocumentSnapshot> documents = result.docs;
+    print(documents.length);
     _startQuestionnaireBtnController.stop();
   }
 }

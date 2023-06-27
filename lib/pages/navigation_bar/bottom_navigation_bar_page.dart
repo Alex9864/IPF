@@ -1,3 +1,4 @@
+import 'package:ipf/pages/database/database_page.dart';
 import 'package:ipf/pages/employees/employees_page.dart';
 import 'package:ipf/pages/home/home_page.dart';
 import 'package:ipf/pages/image%20model/image_model.dart';
@@ -33,6 +34,7 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage> {
     const ViewQuestionnairesPage(),
     const EmployeesPage(),
     const ProfilePage(),
+    DatabasePage(),
   ];
 
   @override
@@ -65,6 +67,11 @@ class _BottomNavigationBarPageState extends State<BottomNavigationBarPage> {
             icon: Icon(Icons.account_circle),
             label: "Profil",
           ),
+          if (role == "Admin") // Condition pour afficher le bouton supplémentaire pour le rôle admin
+            BottomNavigationBarItem(
+              icon: Icon(Icons.storage),
+              label: "Database",
+            ),
         ],
         currentIndex: _pageSelectedIndex,
         unselectedItemColor: Colors.orangeAccent,
