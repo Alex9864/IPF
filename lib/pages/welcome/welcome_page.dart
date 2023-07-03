@@ -59,12 +59,12 @@ class _WelcomePageState extends State<WelcomePage> {
                     ),
                   )
                 ),
-                SvgPicture.asset(
-                  'assets/images/success.svg',
+                Image.asset(
+                  'assets/images/Logo_Peace_Meter.png',
                   height: 300,
                 ),
                 SizedBox(height: 30),
-                Text("Welcome !",
+                Text("Welcome to Peace Meter !",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 25

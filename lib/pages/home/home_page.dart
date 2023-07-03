@@ -62,18 +62,10 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.w800,
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ProfilePage()),
-                        );
-                      },
-                      child: Image.asset(
-                        'assets/images/Avatars/'+ avatar + '.png',
-                        width: 50,
-                        fit: BoxFit.contain,
-                      ),
+                    Image.asset(
+                      'assets/images/Avatars/'+ avatar + '.png',
+                      width: 50,
+                      fit: BoxFit.contain,
                     ),
                   ],
                 ),
@@ -148,18 +140,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
                 SizedBox(height: 20),
-                RoundedLoadingButton(
-                    child: Text(
-                      'Test Button',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
-                    ),
-                    color: Colors.redAccent,
-                    controller: _startQuestionnaireBtnController,
-                    onPressed: () => _onClickTestButton()
-                ),
               ],
             ),
           ),

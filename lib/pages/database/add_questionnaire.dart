@@ -19,6 +19,8 @@ class _AddQuestionnairePageState extends State<AddQuestionnairePage> {
 
   final db = FirebaseFirestore.instance;
 
+  DateTime selectedDate = DateTime.now();
+
 
   List<DropdownMenuItem<String>>? q1DropdownItems;
 
@@ -120,6 +122,20 @@ class _AddQuestionnairePageState extends State<AddQuestionnairePage> {
                                     ),
                                   ],
                                 ),
+                                SizedBox(height: 20),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("Date of questionnaire : "+"${selectedDate.toLocal()}".split(' ')[0]),
+                                      SizedBox(width: 10.0,),
+                                      ElevatedButton(
+                                        onPressed: () => _selectDate(context),
+                                        child: const Text('Select date'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                                 SizedBox(height: 40),
                                 RoundedLoadingButton(
                                     child: Text(
@@ -148,6 +164,18 @@ class _AddQuestionnairePageState extends State<AddQuestionnairePage> {
     return doc.data() as Map<String, dynamic>;
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
 
   void _onClickAddQuestionnaireButton(){
 
