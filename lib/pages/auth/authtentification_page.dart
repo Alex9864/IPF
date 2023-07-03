@@ -180,46 +180,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     _verifyBtnController.stop();
   }
 
-  // void _sendOtpCodeWithFirebase() async {
-  //   if(_EmailFormKey.currentState!.validate()){
-  //     final QuerySnapshot result = await db.collection('users').where('Login', isEqualTo: _EmailTextFormFieldController.text).get();
-  //     final List<DocumentSnapshot> documents = result.docs;
-  //     if (documents.length > 0) { // If Login exists
-  //       if(_PasswordFormKey.currentState!.validate()){
-  //         final data = documents[0].data() as Map<String, dynamic>;
-  //         final password = data['Password'];
-  //         if(_PasswordTextFormFieldController.text == password ){
-  //           final Avatar = data['Avatar'];
-  //           final Role = data['Role'];
-  //           final FirstName = data['FirstName'];
-  //           final LastName = data['LastName'];
-  //           final Login = data['Login'];
-  //           changeUser(Avatar, Role, FirstName, LastName, Login);
-  //           Navigator.of(context).push(
-  //             MaterialPageRoute(
-  //               builder: (context) => const BottomNavigationBarPage()
-  //             )
-  //           );
-  //           _verifyBtnController.stop();
-  //         } else {
-  //           print("Wrong password");
-  //           _verifyBtnController.stop();
-  //         }
-  //       } else {
-  //         print("You must enter a valid password");
-  //         _verifyBtnController.stop();
-  //       }
-  //       _verifyBtnController.stop();
-  //     } else {
-  //       print("No account found with this login");
-  //       _verifyBtnController.stop();
-  //     }
-  //   } else {
-  //     print("You must enter a valid login");
-  //     _verifyBtnController.stop();
-  //   }
-  // }
-
   void changeUser(String Avatar, String Role, String FirstName, String LastName, bool FirstConnection) {
     final imageModel = Provider.of<ImageModel>(context, listen: false);
     imageModel.setAvatar(Avatar);

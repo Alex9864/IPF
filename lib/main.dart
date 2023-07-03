@@ -1,5 +1,4 @@
-import 'package:firebase_admin/firebase_admin.dart';
-import 'package:flutter/services.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:ipf/pages/image%20model/image_model.dart';
 import 'package:ipf/pages/welcome/welcome_page.dart';
 import 'package:flutter/material.dart';
@@ -12,13 +11,9 @@ void main() async{
 
   await Firebase.initializeApp();
 
-  final serviceAccountKeyPath = 'C:\\Users\\Alex\\AndroidStudioProjects\\IPF\\lib\\firebaseadmin.json';
-
-  FirebaseAdmin.instance.initializeApp(
-    AppOptions(
-      credential: FirebaseAdmin.instance.certFromPath(serviceAccountKeyPath),
-    ),
-  );
+  // HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('getUserByEmail');
+  // final resp = await callable.call('bamboulex@gmail.com');
+  // print("result: ${resp.data}");
 
   runApp(const MyApp());
 }
