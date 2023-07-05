@@ -12,8 +12,13 @@ class AddQuestionnairePage extends StatefulWidget {
 
 class _AddQuestionnairePageState extends State<AddQuestionnairePage> {
 
-  String Q1selectedValue = "User";
-  String Q2selectedValue = "User";
+  String Q2selectedValue = "Admin";
+
+  String Q1selectedCategory = "";
+  String Q1selectedValue = "";
+
+  List<DropdownMenuItem<String>>? q1DropdownItems;
+  List<DropdownMenuItem<String>>? q1QuestionsDropdownItems;
 
   final RoundedLoadingButtonController _AddEmployeeBtnController = RoundedLoadingButtonController();
 
@@ -22,29 +27,71 @@ class _AddQuestionnairePageState extends State<AddQuestionnairePage> {
   DateTime selectedDate = DateTime.now();
 
 
-  List<DropdownMenuItem<String>>? q1DropdownItems;
-
   @override
   void initState() {
     super.initState();
-    _loadTravailData();
+    _initializeData();
   }
 
-  void _loadTravailData() async {
-    Map<String, dynamic> travailData = await getTravailData();
+  void _initializeData() async {
+    await _loadTravailData();
+    Q1selectedValue = await getFirstQuestionFromCategory(Q1selectedCategory);
+    await _loadQuestionsForCategory(Q1selectedCategory); // Ajout de cette ligne pour charger les questions
+
+    setState(() {
+      // Mettre à jour les états et le widget ici si nécessaire
+    });
+  }
+
+
+  Future<void> _loadTravailData() async {
+    QuerySnapshot querySnapshot = await db.collection("questionnaires data").get();
     List<DropdownMenuItem<String>> items = [];
 
-    travailData.forEach((key, value) {
+    querySnapshot.docs.forEach((doc) {
+      String categoryName = doc.id;
       items.add(DropdownMenuItem(
-        child: Text(value),
-        value: value,
+        child: Text(categoryName),
+        value: categoryName,
       ));
     });
 
     setState(() {
       q1DropdownItems = items;
+      Q1selectedCategory = items.first.value as String;
     });
   }
+
+  Future<void> _loadQuestionsForCategory(String category) async {
+    DocumentSnapshot categorySnapshot =
+    await db.collection("questionnaires data").doc(category).get();
+    List<DropdownMenuItem<String>> items = [];
+
+    Map<String, dynamic> categoryData =
+    categorySnapshot.data() as Map<String, dynamic>;
+
+    categoryData.forEach((key, value) {
+      items.add(DropdownMenuItem(
+        child: Text(value),
+        value: value, // Use the value as the selected value
+      ));
+    });
+
+    setState(() {
+      q1QuestionsDropdownItems = items;
+      Q1selectedValue = items.first.value as String; // Update the selected value
+    });
+  }
+
+
+  final questionnaire = <String, dynamic>{
+    "Answered": 0,
+    "Q1": "",
+    "Q2": "",
+    "Q3": "",
+    "Q4": "",
+    "Q5": "",
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -76,26 +123,41 @@ class _AddQuestionnairePageState extends State<AddQuestionnairePage> {
                                   ),
                                 ),
                                 SizedBox(height: 60),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                Column(
                                   children: [
-                                    Text("Question 1 :",
-                                      style: TextStyle(
-                                          fontSize: 17
-                                      ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Text("Question 1 :",
+                                          style: TextStyle(
+                                              fontSize: 17
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        DropdownButton(
+                                          value: Q1selectedCategory,
+                                          items: q1DropdownItems,
+                                          onChanged: (newValue) async {
+                                            setState(() {
+                                              Q1selectedCategory = newValue!;
+                                            });
+                                            await _loadQuestionsForCategory(Q1selectedCategory);
+                                          },
+
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(width: 10),
-                                    DropdownButton(
-                                      value: Q1selectedValue,
-                                      items: q1DropdownItems,
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          Q1selectedValue = newValue!;
-                                        });
-                                      },
-                                    )
                                   ],
+                                ),
+                                DropdownButton(
+                                  value: Q1selectedValue,
+                                  items: q1QuestionsDropdownItems,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      Q1selectedValue = newValue!;
+                                    });
+                                  },
                                 ),
                                 SizedBox(height: 20,),
                                 Row(
@@ -111,8 +173,7 @@ class _AddQuestionnairePageState extends State<AddQuestionnairePage> {
                                     DropdownButton(
                                       value: Q2selectedValue ,
                                       items: [
-                                        DropdownMenuItem(child: Text("User"),value: "User"),
-                                        DropdownMenuItem(child: Text("Admin"),value: "Admin"),
+                                        DropdownMenuItem(child: Text("Admin"), value: "Admin"),
                                       ],
                                       onChanged: (newValue) {
                                         setState(() {
@@ -160,7 +221,7 @@ class _AddQuestionnairePageState extends State<AddQuestionnairePage> {
     );
   }
   Future<Map<String, dynamic>> getTravailData() async {
-    DocumentSnapshot doc = await db.collection("questionnaires_data").doc("travail").get();
+    DocumentSnapshot doc = await db.collection("questionnaires data").doc("travail").get();
     return doc.data() as Map<String, dynamic>;
   }
 
@@ -177,7 +238,34 @@ class _AddQuestionnairePageState extends State<AddQuestionnairePage> {
     }
   }
 
-  void _onClickAddQuestionnaireButton(){
+  void _onClickAddQuestionnaireButton() {
+    questionnaire['Q1'] = getQuestionById(Q1selectedValue);
 
+    db.collection("questionnaires").doc(selectedDate.toString()).set(questionnaire);
+  }
+
+  String getQuestionById(String questionId) {
+    DocumentReference questionRef = db.collection("questionnaires data").doc(questionId);
+
+    String question = "";
+
+    questionRef.get().then((questionSnapshot) {
+      if (questionSnapshot.exists) {
+        Map<String, dynamic>? questionData = questionSnapshot.data() as Map<String, dynamic>?;
+        if (questionData != null && questionData.containsKey('question')) {
+          question = questionData['question'].toString();
+        }
+      }
+    });
+
+    return question;
+  }
+
+
+  Future<String> getFirstQuestionFromCategory(String category) async {
+    DocumentSnapshot categorySnapshot = await db.collection("questionnaires data").doc(category).get();
+    Map<String, dynamic> categoryData = categorySnapshot.data() as Map<String, dynamic>;
+    String firstQuestion = categoryData.values.first.toString();
+    return firstQuestion;
   }
 }

@@ -171,11 +171,26 @@ class _DatabasePageState extends State<DatabasePage> {
                           child: new ListView(
                             children: snapshot.data!.docs.map((DocumentSnapshot document) {
                               Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-                              return Column(
-                                children: [
-                                  Text(document.id + data['Q1']),
-                                  SizedBox(height: 10),
-                                ],
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 50,
+                                      width: 200,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        color: Colors.yellow,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(document.id),
+                                        ]
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               );
                             }).toList(),
                           ),
